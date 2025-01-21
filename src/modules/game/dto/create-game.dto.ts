@@ -2,7 +2,7 @@ import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { PickType } from '@nestjs/swagger';
 import { GameDto } from './game.dto';
 
-export class CreateGameRequestDto extends PickType(GameDto, ['name', 'description', 'genre', 'platform']) {
+export class CreateGameDto extends PickType(GameDto, ['name', 'description', 'genre', 'platform']) {
   @MaxLength(100, { message: 'The name must not exceed 100 characters.' })
   @IsNotEmpty({ message: 'The name field is required.' })
   public name: string;

@@ -1,6 +1,6 @@
-import { CreateGameRequestDto } from './create-game.request.dto';
+import { CreateGameDto } from './create-game.dto';
 import { GameDto } from './game.dto';
-import { UpdateGameRequestDto } from './update-game.request.dto';
-import { UpdatePartialGameRequestDto } from './update-partial-game.request.dto';
+import { UpdateGameDto } from './update-game.dto';
+import { UpdatePartialGameDto } from './update-partial-game.dto';
 
-export { CreateGameRequestDto, GameDto, UpdateGameRequestDto, UpdatePartialGameRequestDto };
+export { CreateGameDto, GameDto, UpdateGameDto, UpdatePartialGameDto };

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGameRequestDto, UpdateGameRequestDto, UpdatePartialGameRequestDto } from './dto';
+import { CreateGameDto, UpdateGameDto, UpdatePartialGameDto } from './dto';
 import { Repository } from 'typeorm';
 import { Game } from './entities';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +12,7 @@ import { GameServiceInterface } from './interfaces';
 export class GameService implements GameServiceInterface {
   public constructor(@InjectRepository(Game) private repository: Repository<Game>) {}
 
-  public async create(createGameDto: CreateGameRequestDto): Promise<GameDto> {
+  public async create(createGameDto: CreateGameDto): Promise<GameDto> {
     const game = this.repository.create(createGameDto);
     const savedGame = await this.repository.save(game);
     return plainToInstance(GameDto, savedGame);
@@ -33,7 +33,7 @@ export class GameService implements GameServiceInterface {
     return plainToInstance(GameDto, game);
   }
 
-  public async update(id: number, updateGameDto: UpdatePartialGameRequestDto | UpdateGameRequestDto): Promise<GameDto> {
+  public async update(id: number, updateGameDto: UpdatePartialGameDto | UpdateGameDto): Promise<GameDto> {
     const game = await this.repository.findOneBy({ id });
 
     if (!game) {

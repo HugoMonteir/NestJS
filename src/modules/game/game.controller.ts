@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Put, Inject } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-import { CreateGameRequestDto, GameDto, UpdateGameRequestDto, UpdatePartialGameRequestDto } from './dto';
+import { CreateGameDto, GameDto, UpdateGameDto, UpdatePartialGameDto } from './dto';
 import { GameServiceInterface } from './interfaces';
 import { ParseIntIdPipe } from '../../common/pipes';
 
@@ -26,32 +26,32 @@ export class GameController {
   }
 
   @ApiOperation({ summary: 'Create a new game' })
-  @ApiBody({ type: CreateGameRequestDto })
+  @ApiBody({ type: CreateGameDto })
   @ApiResponse({ status: 201, description: 'Game created successfully', type: GameDto })
   @Post()
-  public async create(@Body() createGameDto: CreateGameRequestDto): Promise<GameDto> {
+  public async create(@Body() createGameDto: CreateGameDto): Promise<GameDto> {
     return this.gameService.create(createGameDto);
   }
 
   @ApiOperation({ summary: 'Update an existing game by ID' })
   @ApiParam({ name: 'id', type: Number, description: 'The unique identifier of the game' })
-  @ApiBody({ type: UpdateGameRequestDto })
+  @ApiBody({ type: UpdateGameDto })
   @ApiResponse({ status: 200, description: 'Game updated successfully', type: GameDto })
   @ApiResponse({ status: 400, description: 'Invalid ID format' })
   @Put(':id')
-  public async update(@Param('id', ParseIntIdPipe) id: number, @Body() updateGameDto: UpdateGameRequestDto): Promise<GameDto> {
+  public async update(@Param('id', ParseIntIdPipe) id: number, @Body() updateGameDto: UpdateGameDto): Promise<GameDto> {
     return this.gameService.update(id, updateGameDto);
   }
 
   @ApiOperation({ summary: 'Partially update an existing game by ID' })
   @ApiParam({ name: 'id', type: Number, description: 'The unique identifier of the game' })
-  @ApiBody({ type: UpdatePartialGameRequestDto })
+  @ApiBody({ type: UpdatePartialGameDto })
   @ApiResponse({ status: 200, description: 'Game partially updated successfully', type: GameDto })
   @ApiResponse({ status: 400, description: 'Invalid ID format' })
   @Patch(':id')
   public async updatePartial(
     @Param('id', ParseIntIdPipe) id: number,
-    @Body() updateGameDto: UpdatePartialGameRequestDto
+    @Body() updateGameDto: UpdatePartialGameDto
   ): Promise<GameDto> {
     return this.gameService.update(id, updateGameDto);
   }
