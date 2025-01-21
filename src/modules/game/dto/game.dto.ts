@@ -2,7 +2,7 @@ import { GameInterface } from '../interfaces';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class GameResponseDto implements GameInterface {
+export class GameDto implements GameInterface {
   @Expose()
   public id: number;
 

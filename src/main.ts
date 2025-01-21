@@ -8,12 +8,12 @@ import { ValidationError } from './common/interfaces';
 
 dotenvConfig();
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const appServerConfig = serverConfig();
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
-      exceptionFactory: (errors) => {
+      exceptionFactory: (errors): ValidationException => {
         const result: ValidationError[] = errors.map((error) => ({
           field: error.property,
           message: error.constraints[Object.keys(error.constraints)[0]]

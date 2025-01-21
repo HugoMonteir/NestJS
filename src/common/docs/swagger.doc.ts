@@ -1,7 +1,7 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 
-export async function swaggerDoc(app: INestApplication, environment: string) {
+export async function swaggerDoc(app: INestApplication, environment: string): Promise<void> {
   if (environment !== 'development') {
     return;
   }

@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 export class LoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger('HTTP');
 
-  public use(req: Request, res: Response, next: NextFunction) {
+  public use(req: Request, res: Response, next: NextFunction): void {
     const { method, originalUrl } = req;
     const startTime = Date.now();
 

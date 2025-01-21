@@ -8,7 +8,7 @@ import { ValidationExceptionResponse } from '../common/interfaces';
 
 @Catch(HttpException)
 export class GlobalExceptionFilter implements ExceptionFilter {
-  public catch(exception: HttpException, host: ArgumentsHost) {
+  public catch(exception: HttpException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
