@@ -49,10 +49,7 @@ export class GameController {
   @ApiResponse({ status: 200, description: 'Game partially updated successfully', type: GameDto })
   @ApiResponse({ status: 400, description: 'Invalid ID format' })
   @Patch(':id')
-  public async updatePartial(
-    @Param('id', ParseIntIdPipe) id: number,
-    @Body() updateGameDto: UpdatePartialGameDto
-  ): Promise<GameDto> {
+  public async updatePartial(@Param('id', ParseIntIdPipe) id: number, @Body() updateGameDto: UpdatePartialGameDto): Promise<GameDto> {
     return this.gameService.update(id, updateGameDto);
   }
 

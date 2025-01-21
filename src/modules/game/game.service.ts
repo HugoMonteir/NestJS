@@ -42,7 +42,7 @@ export class GameService implements GameServiceInterface {
 
     const newGame: Game = {
       ...game,
-      ...updateGameDto
+      ...Object.fromEntries(Object.entries(updateGameDto).filter(([_, value]) => value !== undefined))
     };
 
     const updatedGame = await this.repository.save(newGame);

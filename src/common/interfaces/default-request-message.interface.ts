@@ -1,6 +1,6 @@
 export interface DefaultRequestMessageInterface {
   timestamp: string;
   status: number;
-  message: any;
+  message: object | string;
   path: string;
 }
