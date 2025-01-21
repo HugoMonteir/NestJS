@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, Put } from '@nestjs/common';
-import { GameService } from './game.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, Put, Inject } from '@nestjs/common';
 import { CreateGameRequestDto, GameDto, UpdateGameRequestDto, UpdatePartialGameRequestDto } from './dto';
+import { GameServiceInterface } from './interfaces';
 
 @Controller('games')
 export class GameController {
-  public constructor(private readonly gameService: GameService) {}
+  public constructor(@Inject('GameService') private readonly gameService: GameServiceInterface) {}
 
   @Get()
   public async findAll(): Promise<GameDto[]> {

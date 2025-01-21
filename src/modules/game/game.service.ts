@@ -6,9 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { GameDto } from './dto';
 import { GameNotFoundException } from '../../exceptions';
+import { GameServiceInterface } from './interfaces';
 
 @Injectable()
-export class GameService {
+export class GameService implements GameServiceInterface {
   public constructor(@InjectRepository(Game) private repository: Repository<Game>) {}
 
   public async create(createGameDto: CreateGameRequestDto): Promise<GameDto> {
