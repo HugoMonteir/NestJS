@@ -46,6 +46,7 @@ export class GameService implements GameServiceInterface {
     };
 
     const updatedGame = await this.repository.save(newGame);
+
     return plainToInstance(GameDto, updatedGame);
   }
 
