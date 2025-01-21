@@ -3,25 +3,14 @@ import { AppModule } from './app.module';
 import { swaggerDoc } from './common/docs';
 import { serverConfig, dotenvConfig } from './configs';
 import { ValidationPipe } from '@nestjs/common';
-import { GlobalExceptionFilter, ValidationException } from './exceptions';
-import { ValidationError } from './common/interfaces';
+import { GlobalExceptionFilter, validationExceptionFactory as exceptionFactory } from './exceptions';
 
 dotenvConfig();
 
 async function bootstrap(): Promise<void> {
   const appServerConfig = serverConfig();
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      exceptionFactory: (errors): ValidationException => {
-        const result: ValidationError[] = errors.map((error) => ({
-          field: error.property,
-          message: error.constraints[Object.keys(error.constraints)[0]]
-        }));
-        return new ValidationException(result);
-      }
-    })
-  );
+  app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.enableCors(appServerConfig.cors);
   await swaggerDoc(app, appServerConfig.environment);
