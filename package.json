@@ -24,7 +24,11 @@
   "lint-staged": {
     "src/**/*.ts": [
       "npm run lint",
-      "git add -A"
+      "git add ."
+    ],
+    "tests/**/*.ts": [
+      "npm run lint",
+      "git add ."
     ]
   },
   "dependencies": {
