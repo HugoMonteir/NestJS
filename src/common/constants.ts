@@ -2,6 +2,7 @@ import { ForbiddenException, NotFoundException, UnauthorizedException } from '@n
 
 export const SERVER_CONFIG = 'SERVER_CONFIG';
 export const TYPEORM_CONFIG = 'TYPEORM_CONFIG';
+export const JWT_MODULE_CONFIG = 'JWT_MODULE_CONFIG';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const EXCEPTION_MESSAGES: Map<Function, string | object> = new Map([
