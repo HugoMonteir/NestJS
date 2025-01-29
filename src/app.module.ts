@@ -4,6 +4,8 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
 import { typeormConfig } from './configs/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './middlewares';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -15,7 +17,9 @@ import { LoggerMiddleware } from './middlewares';
       inject: [typeormConfig.KEY],
       useFactory: async (config: ConfigType<typeof typeormConfig>) => config
     }),
-    GameModule
+    GameModule,
+    AuthModule,
+    UserModule
   ]
 })
 export class AppModule implements NestModule {
