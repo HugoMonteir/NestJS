@@ -19,6 +19,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     const { entity, manager } = event;
 
     await this._checkEmailUniqueness(entity as User, manager);
+    await this._checkUsernameUniqueness(entity as User, manager);
     await this._hashUpdatedPassword(event);
   }
 
@@ -31,6 +32,18 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     if (user && user.id !== entity.id) {
       throw new BadRequestException(`The email '${entity.email}' is already in use.`);
+    }
+  }
+
+  private async _checkUsernameUniqueness(entity: User, manager: EntityManager): Promise<void> {
+    if (!entity) {
+      return;
+    }
+
+    const user = await manager.getRepository(User).findOneBy({ username: entity.username });
+
+    if (user && user.id !== entity.id) {
+      throw new BadRequestException(`The username '${entity.username}' is already in use.`);
     }
   }
 
