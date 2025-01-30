@@ -1,8 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TYPEORM_CONFIG } from '../common/constants';
-import { GameSubscriber } from '../modules/game/game.subscriber';
-import { UserSubscriber } from '../modules/user/user.subscriber';
 
 export const typeormConfig = registerAs(TYPEORM_CONFIG, (): TypeOrmModuleOptions => {
   return {
@@ -11,7 +9,6 @@ export const typeormConfig = registerAs(TYPEORM_CONFIG, (): TypeOrmModuleOptions
     migrationsRun: process.env.DATABASE_MIGRATIONS_RUN === 'true',
     migrations: [__dirname + '/../migrations/*.{js,ts}'],
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
-    subscribers: [GameSubscriber, UserSubscriber],
     synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
     autoLoadEntities: true,
     logging: true,

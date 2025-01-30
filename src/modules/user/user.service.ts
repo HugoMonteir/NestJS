@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities';
 import { Repository } from 'typeorm';
@@ -14,13 +14,9 @@ export class UserService {
   ) {}
 
   public async create(createUser: CreateUserDto): Promise<UserDto> {
-    try {
-      const user = this.repository.create(createUser);
-      const dbUser = await this.repository.save(user);
-      return plainToInstance(UserDto, dbUser);
-    } catch (error) {
-      throw new InternalServerErrorException('Error trying to create a user: ' + error.message);
-    }
+    const user = this.repository.create(createUser);
+    const dbUser = await this.repository.save(user);
+    return plainToInstance(UserDto, dbUser);
   }
 
   public async findOne(id: number): Promise<UserDto> {
