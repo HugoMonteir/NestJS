@@ -2,11 +2,11 @@ import * as bcrypt from 'bcrypt';
 
 export abstract class CryptUtil {
   public static async generateSalt(): Promise<string> {
-    return bcrypt.genSalt();
+    return await bcrypt.genSalt(10);
   }
 
   public static async hashPassword(password: string, salt: string): Promise<string> {
-    return bcrypt.hash(password, salt);
+    return await bcrypt.hash(password, salt);
   }
 
   public static async validatePassword(passwordPlain: string, passwordCrypt: string, salt: string): Promise<boolean> {
