@@ -37,7 +37,7 @@ export class UserService {
       throw new BadCredentialsException('Invalid email or password');
     }
 
-    if (await CryptUtil.validatePassword(password, user.password, await CryptUtil.generateSalt())) {
+    if (!(await CryptUtil.validatePassword(password, user.password, user.salt))) {
       throw new BadCredentialsException('Invalid email or password');
     }
 

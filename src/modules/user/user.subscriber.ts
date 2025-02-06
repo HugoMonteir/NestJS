@@ -12,6 +12,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     const { entity, manager } = event;
 
     await this._checkEmailUniqueness(entity as User, manager);
+    await this._checkUsernameUniqueness(entity as User, manager);
     await this._hashInsertedPassword(event);
   }
 
@@ -50,6 +51,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   private async _hashPassword(user: User): Promise<void> {
     const salt = await CryptUtil.generateSalt();
     user.password = await CryptUtil.hashPassword(user.password, salt);
+    user.salt = salt;
   }
 
   private async _hashInsertedPassword(event: InsertEvent<User>): Promise<void> {

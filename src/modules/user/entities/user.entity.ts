@@ -18,6 +18,9 @@ export class User implements UserInterface {
   public password: string;
 
   @Column({ type: 'varchar', nullable: false, length: 30 })
+  public salt: string;
+
+  @Column({ type: 'varchar', nullable: false, length: 30 })
   public status: string;
 
   @Column({ type: 'varchar', nullable: false, length: 30 })
