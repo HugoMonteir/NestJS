@@ -12,7 +12,6 @@ export class UserDto implements UserInterface {
   @Expose()
   public email: string;
 
-  @Expose()
   public salt: string;
 
   public password: string;
