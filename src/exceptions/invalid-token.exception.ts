@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 
-export class UserNotFoundException extends UnauthorizedException {
+export class InvalidTokenException extends UnauthorizedException {
   public constructor(message: string) {
     super(message);
   }

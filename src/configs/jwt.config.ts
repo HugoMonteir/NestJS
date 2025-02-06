@@ -13,7 +13,7 @@ export const jwtConfig = registerAs(
     },
     refresh: {
       signOptions: {
-        expiresIn: process.env.JWT_REFRESH_EXPIRES || '1y'
+        expiresIn: process.env.JWT_REFRESH_EXPIRES || '1d'
       }
     }
   })

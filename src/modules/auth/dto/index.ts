@@ -1,3 +1,4 @@
-import { AuthResponseDto } from './auth.response.dto';
+import { LoginDto } from './login.dto';
+import { TokensDto } from './tokens.dto';
 
-export { AuthResponseDto };
+export { LoginDto, TokensDto };

@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from '../user/dto';
-import { AuthResponseDto } from './dto';
+import { TokensDto } from './dto';
 import { JwtConfigService } from './jwt.config.service';
-
-class JwtPayload {}
+import { plainToInstance } from 'class-transformer';
+import { AuthRefreshDto } from './dto/auth-refresh.dto';
+import { JwtPayload } from './interfaces';
+import { InvalidTokenException } from '../../exceptions';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +21,7 @@ export class AuthService {
     return await this.userService.validateUserByEmailAndPassword(email, password);
   }
 
-  public async jwtSign(user: UserDto): Promise<AuthResponseDto> {
+  public async jwtSign(user: UserDto): Promise<TokensDto> {
     const accessConfig = this.jwtConfigService.getAccessConfig();
     const refreshConfig = this.jwtConfigService.getRefreshConfig();
 
@@ -29,6 +31,20 @@ export class AuthService {
 
     const refreshToken = this.jwtService.sign(payload, refreshConfig.signOptions);
 
-    return new AuthResponseDto(accessToken, refreshToken);
+    return plainToInstance(TokensDto, { accessToken, refreshToken });
+  }
+
+  public async jwtRefresh(authRefreshDto: AuthRefreshDto): Promise<TokensDto> {
+    const refreshConfig = this.jwtConfigService.getRefreshConfig();
+
+    const verified = await this.jwtService.verifyAsync<JwtPayload>(authRefreshDto.refreshToken, refreshConfig.verifyOptions);
+
+    if (!verified) {
+      throw new InvalidTokenException('Invalid token');
+    }
+
+    const id = verified.sub;
+    const user = await this.userService.findOne(id);
+    return this.jwtSign(user);
   }
 }
