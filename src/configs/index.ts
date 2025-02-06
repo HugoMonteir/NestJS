@@ -1,4 +1,6 @@
-import { serverConfig } from './server.config';
 import { config as dotenvConfig } from 'dotenv';
+import { jwtConfig } from './jwt.config';
+import { serverConfig } from './server.config';
+import { typeormConfig } from './typeorm.config';
 
-export { serverConfig, dotenvConfig };
+export { dotenvConfig, serverConfig, jwtConfig, typeormConfig };

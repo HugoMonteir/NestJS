@@ -20,6 +20,7 @@ import { UserSubscriber } from './user.subscriber';
       },
       inject: [DataSource]
     }
-  ]
+  ],
+  exports: [UserService]
 })
 export class UserModule {}

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GameModule } from './modules/game/game.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import { typeormConfig } from './configs/typeorm.config';
+import { typeormConfig, jwtConfig } from './configs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './middlewares';
 import { AuthModule } from './modules/auth/auth.module';
@@ -11,7 +11,7 @@ import { UserModule } from './modules/user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeormConfig]
+      load: [typeormConfig, jwtConfig]
     }),
     TypeOrmModule.forRootAsync({
       inject: [typeormConfig.KEY],

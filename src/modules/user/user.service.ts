@@ -4,7 +4,8 @@ import { User } from './entities';
 import { Repository } from 'typeorm';
 import { CreateUserDto, UserDto } from './dto';
 import { plainToInstance } from 'class-transformer';
-import { UserNotFoundException } from '../../exceptions';
+import { BadCredentialsException, UserNotFoundException } from '../../exceptions';
+import { CryptUtil } from '../../common/utils/crypt.util';
 
 @Injectable()
 export class UserService {
@@ -24,6 +25,20 @@ export class UserService {
 
     if (!user) {
       throw new UserNotFoundException('This user does not exist');
+    }
+
+    return plainToInstance(UserDto, user);
+  }
+
+  public async validateUserByEmailAndPassword(email: string, password: string): Promise<UserDto> {
+    const user = await this.repository.findOneBy({ email });
+
+    if (!user) {
+      throw new BadCredentialsException('Invalid email or password');
+    }
+
+    if (await CryptUtil.validatePassword(password, user.password, await CryptUtil.generateSalt())) {
+      throw new BadCredentialsException('Invalid email or password');
     }
 
     return plainToInstance(UserDto, user);
