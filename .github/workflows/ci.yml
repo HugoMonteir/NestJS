@@ -101,10 +101,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-      - name: Revert Last Commit
+      - name: Revert Last Commit Without Deleting Files
         run: |
-          git revert -n HEAD
-          git commit -m "Reverting last commit due to failed pipeline"
+          git revert --no-edit HEAD || echo "Nothing to revert"
           git push origin master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
