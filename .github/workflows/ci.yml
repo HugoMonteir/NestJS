@@ -108,21 +108,3 @@ jobs:
           git push origin master --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  close-pr:
-    name: Close PR on Failure
-    runs-on: ubuntu-latest
-    if: failure() && github.event_name == 'pull_request'
-    needs: [lint, build, test]
-
-    steps:
-      - name: Close Pull Request
-        uses: octokit/request-action@v2.x
-        with:
-          route: PATCH /repos/{owner}/{repo}/pulls/{pull_number}
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          pull_number: ${{ github.event.pull_request.number }}
-          state: closed
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
