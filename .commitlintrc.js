@@ -1,24 +1,21 @@
-const matchAnyEmojiWithSpaceAfter =
-  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])\s/;
-const matchOptionalTicketNumberWithSpaceAfter = /(?:\[(T-\d+)]\s)?/;
-const subjectThatDontStartWithBracket = /([^\[].+)/;
-
 module.exports = {
+  extends: ["@commitlint/config-conventional"],
+  rules: {
+    "type-case": [2, "always", "lower-case"],
+    "subject-case": [2, "never", []],
+    "header-max-length": [2, "always", 100],
+    "type-empty": [2, "never"],
+    "subject-empty": [2, "never"],
+    "type-enum": [
+      2,
+      "always",
+      ["feat", "fix", "chore", "docs", "style", "refactor", "perf", "test", "build", "ci", "revert"]
+    ]
+  },
   parserPreset: {
     parserOpts: {
-      headerPattern: new RegExp(
-        "^" +
-        matchAnyEmojiWithSpaceAfter.source +
-        matchOptionalTicketNumberWithSpaceAfter.source +
-        subjectThatDontStartWithBracket.source +
-        "$"
-      ),
-      headerCorrespondence: ["type", "ticket", "subject"],
-    },
-  },
-  rules: {
-    "type-enum": [2, "always", ["♿", "✅", "⬆️", "⬇️", "➕", "👌", "💫", "🐛", "💡", "🎉",
-    "🔧", "🚀", "📚", "🚧", "💄", "🧱", "🔜", "🚚", "✨", "📦", "⚡", "♻️", "🧹", "🗑️", "➖",
-      "📱", "💥", "🔒️", "🔍️", "🔖", "✔️", "🧪", "📝", "🏷️️", "🥅", "🗃️"]],
-  },
+      headerPattern: /^(\p{Emoji} )?(\w+)(?:\(([^)]+)\))?!?: (.+)$/u,
+      headerCorrespondence: ["emoji", "type", "scope", "subject"]
+    }
+  }
 };
