@@ -11,7 +11,7 @@ import { ConfigType } from '@nestjs/config';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   public constructor(
     @Inject(jwtConfig.KEY)
-    private config: ConfigType<typeof jwtConfig>,
+    config: ConfigType<typeof jwtConfig>,
     private userService: UserService
   ) {
     super({

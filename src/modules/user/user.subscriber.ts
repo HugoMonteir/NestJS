@@ -32,7 +32,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     const user = await manager.getRepository(User).findOneBy({ email: entity.email });
 
     if (user && user.id !== entity.id) {
-      throw new BadRequestException(`The email '${entity.email}' is already in use.`);
+      throw new BadRequestException(`The email '${entity.email}' is already in use`);
     }
   }
 
@@ -44,7 +44,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     const user = await manager.getRepository(User).findOneBy({ username: entity.username });
 
     if (user && user.id !== entity.id) {
-      throw new BadRequestException(`The username '${entity.username}' is already in use.`);
+      throw new BadRequestException(`The username '${entity.username}' is already in use`);
     }
   }
 
