@@ -1,0 +1,29 @@
+import { Config } from 'jest';
+
+const config: Config = {
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  rootDir: '.',
+  testRegex: '.*\\.spec\\.ts$',
+  transform: {
+    '^.+\\.(t|j)s$': 'ts-jest'
+  },
+  collectCoverage: true,
+  collectCoverageFrom: ['src/modules/**/*.controller.ts', 'src/modules/**/*.service.ts', 'src/modules/**/*.subscriber.ts'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    'src/main.ts',
+    'src/app.module.ts',
+    'src/modules/.*/dto/.*',
+    'src/modules/.*/entities/.*',
+    'src/modules/.*/interfaces/.*',
+    'src/common/.*',
+    'src/exceptions/.*',
+    'src/middlewares/.*'
+  ],
+  coverageDirectory: './coverage',
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  testEnvironment: 'node'
+};
+
+export default config;

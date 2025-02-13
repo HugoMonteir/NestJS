@@ -1,0 +1,25 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "check-coverage": true,
+  "per-file": true,
+  "reporter": ["html", "text-summary", "json"],
+  "include": [
+    "src/modules/**/*.controller.ts",
+    "src/modules/**/*.service.ts",
+    "src/modules/**/*.subscriber.ts",
+    "src/modules/**/*.guard.ts",
+    "src/modules/**/*.strategy.ts"
+  ],
+  "exclude": [
+    "src/main.ts",
+    "src/app.module.ts",
+    "src/modules/.*/dto/.*",
+    "src/modules/.*/entities/.*",
+    "src/modules/.*/interfaces/.*",
+    "src/common/.*",
+    "src/exceptions/.*",
+    "src/middlewares/.*"
+  ],
+  "cache": false
+}
