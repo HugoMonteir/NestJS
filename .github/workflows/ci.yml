@@ -104,8 +104,7 @@ jobs:
 
       - name: Undo Last Commit but Keep Files
         run: |
-          git reset --soft HEAD~1
-          git commit -m "Reverting last commit due to failed pipeline"
+          git reset --hard HEAD~1
           git push origin master --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
