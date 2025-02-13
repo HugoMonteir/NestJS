@@ -103,8 +103,9 @@ jobs:
 
       - name: Revert Last Commit
         run: |
-          git reset --hard HEAD~1
-          git push origin master --force
+          git revert -n HEAD
+          git commit -m "Reverting last commit due to failed pipeline"
+          git push origin master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
