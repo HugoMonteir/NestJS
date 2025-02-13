@@ -1,7 +1,11 @@
 /* eslint-disable */
-const allowedEmojis = [
-  "♿", "✅", "⬆", "⬇", "➕", "👌", "💫", "🐛", "💡", "🎉", "🔧", "🚀", "📚", "🚧", "💄", "🧱", "🔜", "🚚",
-  "✨", "📦", "⚡", "♻", "🧹", "🗑", "➖", "📱", "💥", "🔒", "🔍", "🔖", "✔", "🧪", "📝", "🏷", "🥅", "🗃"
+const allowedEmojiCodes = [
+  ':wheelchair:', ':white_check_mark:', ':arrow_up:', ':arrow_down:', ':heavy_plus_sign:',
+  ':ok_hand:', ':dizzy:', ':bug:', ':bulb:', ':tada:', ':wrench:', ':rocket:', ':books:',
+  ':construction:', ':lipstick:', ':bricks:', ':soon:', ':truck:', ':sparkles:', ':package:',
+  ':zap:', ':recycle:', ':broom:', ':wastebasket:', ':heavy_minus_sign:', ':iphone:', ':boom:',
+  ':lock:', ':mag:', ':bookmark:', ':heavy_check_mark:', ':test_tube:', ':pencil:', ':label:',
+  ':goal_net:', ':card_file_box:'
 ];
 
 module.exports = {
@@ -12,13 +16,17 @@ module.exports = {
     'header-max-length': [2, 'always', 100],
     'type-empty': [2, 'never'],
     'subject-empty': [2, 'never'],
-    'type-enum': [2, 'always', ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'revert']],
+    'type-enum': [
+      2,
+      'always',
+      ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'revert']
+    ],
     'emoji-empty': [2, 'never'],
-    'emoji-enum': [2, 'always', allowedEmojis]
+    'emoji-enum': [2, 'always', allowedEmojiCodes]
   },
   parserPreset: {
     parserOpts: {
-      headerPattern: `^(${allowedEmojis.join('|')}) (\\w+)(?:\\(([^)]+)\\))?!?: (.+)$`,
+      headerPattern: `^(${allowedEmojiCodes.join('|')}) (\\w+)(?:\\(([^)]+)\\))?!?: (.+)$`,
       headerPatternFlags: 'u',
       headerCorrespondence: ['emoji', 'type', 'scope', 'subject']
     }
@@ -35,8 +43,8 @@ module.exports = {
         },
         'emoji-enum': (parsed) => {
           const { emoji } = parsed;
-          if (!emoji || !allowedEmojis.includes(emoji)) {
-            return [false, `The emoji may be one of these types: ${allowedEmojis.join(' ')}`];
+          if (!emoji || !allowedEmojiCodes.includes(emoji)) {
+            return [false, `See: https://github.com/iuricode/padroes-de-commits?tab=readme-ov-file`];
           }
           return [true];
         }
