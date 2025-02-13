@@ -21,11 +21,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JwtPayload): Promise<UserDto> {
-    const { sub } = payload;
+    const { sub, type } = payload;
+
+    if (type !== 'access') {
+      throw new InvalidTokenException('Invalid access Token');
+    }
+
     const user = await this.userService.findOne(sub);
 
     if (!user) {
-      throw new InvalidTokenException('Invalid Token');
+      throw new InvalidTokenException('Invalid access Token');
     }
 
     return user;

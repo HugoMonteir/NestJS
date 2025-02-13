@@ -16,19 +16,19 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     _: ExecutionContext
   ): TUser {
     if (info && typeof info === 'object' && info.message === 'No auth token') {
-      throw new InvalidTokenException('Token is missing');
+      throw new InvalidTokenException('Access Token is missing');
     }
 
     if (info && typeof info === 'object' && info.message === 'jwt expired') {
-      throw new InvalidTokenException('Token has expired');
+      throw new InvalidTokenException('Access Token has expired');
     }
 
     if (info && typeof info === 'object' && info.message === 'invalid token') {
-      throw new InvalidTokenException('Invalid token');
+      throw new InvalidTokenException('Invalid Access token');
     }
 
     if (err || !user) {
-      throw err || new InvalidTokenException('Invalid token');
+      throw err || new InvalidTokenException('Invalid Access token');
     }
 
     return user;
