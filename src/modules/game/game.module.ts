@@ -10,10 +10,7 @@ import { GameSubscriber } from './game.subscriber';
   imports: [TypeOrmModule.forFeature([Game])],
   controllers: [GameController],
   providers: [
-    {
-      provide: 'GameService',
-      useClass: GameService
-    },
+    GameService,
     {
       provide: 'GameSubscriber',
       useFactory: (dataSource: DataSource): GameSubscriber => {

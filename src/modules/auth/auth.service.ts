@@ -3,11 +3,11 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from '../user/dto';
 import { TokensDto } from './dto';
-import { JwtConfigService } from './jwt.config.service';
 import { plainToInstance } from 'class-transformer';
 import { AuthRefreshDto } from './dto/auth-refresh.dto';
 import { JwtPayload } from './interfaces';
 import { InvalidTokenException } from '../../exceptions';
+import { JwtConfigService } from './jwt.config.service';
 
 @Injectable()
 export class AuthService {
