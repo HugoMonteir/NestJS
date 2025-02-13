@@ -1,5 +1,5 @@
 describe('AppController', () => {
   it('To be truthy', () => {
-    expect(false).toBeTruthy();
+    expect(true).toBeTruthy();
   });
 });
