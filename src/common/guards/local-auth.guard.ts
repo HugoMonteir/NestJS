@@ -3,9 +3,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { validate, ValidationError } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { LoginDto } from '../dto';
-import { ValidationErrorProperty } from '../../../common/interfaces';
-import { ValidationException } from '../../../exceptions';
+import { LoginDto } from '../../modules/auth/dto';
+import { ValidationErrorProperty } from '../interfaces';
+import { ValidationException } from '../../exceptions';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {

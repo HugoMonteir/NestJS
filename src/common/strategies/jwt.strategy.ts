@@ -1,10 +1,10 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { UserService } from '../../user/user.service';
-import { UserDto } from '../../user/dto';
-import { InvalidTokenException } from '../../../exceptions';
-import { JwtPayload } from '../interfaces';
+import { UserService } from '../../modules/user/user.service';
+import { UserDto } from '../../modules/user/dto';
+import { InvalidTokenException } from '../../exceptions';
+import { JwtPayload } from '../../modules/auth/interfaces';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { jwtConfig } from '../../../configs';
+import { jwtConfig } from '../../configs';
 import { Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 

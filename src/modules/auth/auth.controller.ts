@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
-import { AuthUser } from './decorator';
+import { AuthUser } from '../../common/decorators';
 import { UserDto } from '../user/dto';
-import { LocalAuthGuard } from './guard';
+import { LocalAuthGuard } from '../../common/guards';
 import { LoginDto, TokensDto } from './dto';
 import { ApiOperation, ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthRefreshDto } from './dto/auth-refresh.dto';

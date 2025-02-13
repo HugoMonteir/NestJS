@@ -8,8 +8,8 @@
     "src/modules/**/*.controller.ts",
     "src/modules/**/*.service.ts",
     "src/modules/**/*.subscriber.ts",
-    "src/modules/**/*.guard.ts",
-    "src/modules/**/*.strategy.ts"
+    "src/common/guards/*.guard.ts",
+    "src/common/strategies/*.strategy.ts"
   ],
   "exclude": [
     "src/main.ts",
