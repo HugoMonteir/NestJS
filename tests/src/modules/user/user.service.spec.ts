@@ -76,7 +76,7 @@ describe('UserService', () => {
       const id = -1;
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(null);
 
-      // Act / Assert
+      // Act & Assert
       await expect(userService.findOne(id)).rejects.toThrow(new UserNotFoundException('This user does not exist'));
       expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
       expect(userRepository.findOneBy).toHaveBeenCalledWith({ id });
@@ -108,7 +108,7 @@ describe('UserService', () => {
       const password = 'Hugo123#';
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(null);
 
-      // Act / Assert
+      // Act & Assert
       await expect(userService.validateUserByEmailAndPassword(email, password)).rejects.toThrow(
         new BadCredentialsException('Invalid email or password')
       );
@@ -122,7 +122,7 @@ describe('UserService', () => {
       const password = 'wrongPassword';
       jest.spyOn(CryptUtil, 'validatePassword').mockResolvedValueOnce(false);
 
-      // Act / Assert
+      // Act & Assert
       await expect(userService.validateUserByEmailAndPassword(email, password)).rejects.toThrow(
         new BadCredentialsException('Invalid email or password')
       );
