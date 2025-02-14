@@ -65,7 +65,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   private async _hashUpdatedPassword(event: UpdateEvent<User>): Promise<void> {
     const user = event.entity as User;
 
-    const currentRecord = await event.manager.findOne(User, { where: { id: user.id } });
+    const currentRecord = await event.manager.getRepository(User).findOneBy({ id: user.id });
 
     if (currentRecord.password && user.password && user.password !== currentRecord.password) {
       await this._hashPassword(user);
