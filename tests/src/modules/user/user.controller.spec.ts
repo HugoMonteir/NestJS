@@ -2,7 +2,7 @@ import { createUserDto, userResponseDto } from './user-data-mock.constants';
 import { UserController } from '../../../../src/modules/user/user.controller';
 import { UserService } from '../../../../src/modules/user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto, UserDto } from '../../../../src/modules/user/dto';
+import { CreateUserDto } from '../../../../src/modules/user/dto';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -35,7 +35,7 @@ describe('UserController', () => {
     it('should create a new user', async () => {
       // Arrange
       const body: CreateUserDto = { ...createUserDto };
-      const response: UserDto = { ...userResponseDto };
+      const response = { ...userResponseDto };
 
       // Act
       const result = await userController.create(body);
@@ -50,7 +50,7 @@ describe('UserController', () => {
   describe('getProfile', () => {
     it('should return the authenticated user', async () => {
       // Arrange
-      const mockUser: UserDto = { ...userResponseDto };
+      const mockUser = { ...userResponseDto };
 
       // Act
       const result = await userController.getProfile(mockUser);

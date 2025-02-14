@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { UserService } from '../../modules/user/user.service';
-import { UserDto } from '../../modules/user/dto';
+import { UserResponseDto } from '../../modules/user/dto';
 import { InvalidTokenException } from '../../exceptions';
 import { JwtPayload } from '../../modules/auth/interfaces';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  public async validate(payload: JwtPayload): Promise<UserDto> {
+  public async validate(payload: JwtPayload): Promise<UserResponseDto> {
     const { sub, type } = payload;
 
     if (type !== 'access') {

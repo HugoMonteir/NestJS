@@ -1,5 +1,5 @@
 import { User } from '../../../../src/modules/user/entities';
-import { CreateUserDto, UserDto } from '../../../../src/modules/user/dto';
+import { CreateUserDto, UserDto, UserResponseDto } from '../../../../src/modules/user/dto';
 
 export const user: User = {
   id: 1,
@@ -11,6 +11,20 @@ export const user: User = {
   status: 'active'
 };
 
-export const userResponseDto: UserDto = { ...user };
+export const userDto: UserDto = { ...user };
 
-export const createUserDto: CreateUserDto = { ...user, password: 'Hugo123#' };
+export const userResponseDto: UserResponseDto = {
+  id: userDto.id,
+  username: userDto.username,
+  email: userDto.email,
+  role: userDto.role,
+  status: userDto.status
+};
+
+export const createUserDto: CreateUserDto = {
+  username: user.username,
+  email: user.email,
+  password: 'Hugo123#',
+  status: user.status,
+  role: user.role
+};

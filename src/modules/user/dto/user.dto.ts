@@ -4,15 +4,19 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class UserDto implements UserInterface {
-  @ApiProperty({ description: 'Unique username of the user', maxLength: 50, example: 'john_doe' })
+  @ApiProperty({ description: 'Unique identifier of the user', example: 1 })
   @Expose()
   public id: number;
 
-  @ApiProperty({ description: 'Valid email address of the user', maxLength: 255, example: 'john.doe@example.com' })
+  @ApiProperty({ description: 'Unique username chosen by the user', maxLength: 50, example: 'john_doe' })
   @Expose()
   public username: string;
 
-  @ApiProperty({ description: 'Strong password for user authentication', maxLength: 255, example: 'StrongPass!2023' })
+  @ApiProperty({
+    description: 'Email address of the user, used for authentication and communication',
+    maxLength: 255,
+    example: 'john.doe@example.com'
+  })
   @Expose()
   public email: string;
 
@@ -20,7 +24,7 @@ export class UserDto implements UserInterface {
 
   public password: string;
 
-  @ApiProperty({ description: 'Status of the user (e.g., active, inactive)', maxLength: 30, example: 'active' })
+  @ApiProperty({ description: 'Status of the user (active, inactive)', maxLength: 30, example: 'active' })
   @Expose()
   public status: string;
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto } from '../user/dto';
+import { UserResponseDto } from '../user/dto';
 import { TokensDto } from './dto';
 import { plainToInstance } from 'class-transformer';
 import { AuthRefreshDto } from './dto/auth-refresh.dto';
@@ -17,11 +17,11 @@ export class AuthService {
     private jwtConfigService: JwtConfigService
   ) {}
 
-  public async validateUser(email: string, password: string): Promise<UserDto> {
+  public async validateUser(email: string, password: string): Promise<UserResponseDto> {
     return await this.userService.validateUserByEmailAndPassword(email, password);
   }
 
-  public async jwtSign(user: UserDto): Promise<TokensDto> {
+  public async jwtSign(user: UserResponseDto): Promise<TokensDto> {
     const accessConfig = this.jwtConfigService.getAccessConfig();
     const refreshConfig = this.jwtConfigService.getRefreshConfig();
 
