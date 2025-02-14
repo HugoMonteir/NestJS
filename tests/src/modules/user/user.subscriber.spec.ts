@@ -23,10 +23,11 @@ describe('UserSubscriber', () => {
     } as unknown as jest.Mocked<EntityManager>;
 
     insertEvent = { entity: userEntity, manager } as unknown as InsertEvent<User>;
-    jest.clearAllMocks();
     updateEvent = { entity: userEntity, manager } as unknown as UpdateEvent<User>;
 
     userSubscriber = new UserSubscriber();
+
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -46,13 +47,15 @@ describe('UserSubscriber', () => {
 
   describe('beforeInsert', () => {
     it('should hash the password before insert', async () => {
+      // Arrange
       const originalPassword = userEntity.password;
-
       jest.spyOn(CryptUtil, 'generateSalt').mockResolvedValue('randomSalt');
       jest.spyOn(CryptUtil, 'hashPassword').mockResolvedValue('hashedPassword');
 
+      // Act
       await userSubscriber.beforeInsert(insertEvent);
 
+      // Assert
       expect(CryptUtil.generateSalt).toHaveBeenCalledTimes(1);
       expect(CryptUtil.hashPassword).toHaveBeenCalledWith(originalPassword, 'randomSalt');
       expect(userEntity.password).toBe('hashedPassword');
@@ -61,76 +64,108 @@ describe('UserSubscriber', () => {
 
     it('should throw BadRequestException when email is already in use', async () => {
       // Arrange
-      userRepository.findOneBy.mockResolvedValueOnce(userEntity);
+      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue({ ...userEntity, id: 2 });
 
       // Act & Assert
       await expect(userSubscriber.beforeInsert(insertEvent)).rejects.toThrow(
         new BadRequestException(`The email '${userEntity.email}' is already in use`)
       );
-
       expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
       expect(userRepository.findOneBy).toHaveBeenCalledWith({ email: userEntity.email });
     });
 
     it('should throw BadRequestException when username is already in use', async () => {
+      // Arrange
       manager.getRepository(User).findOneBy = jest
         .fn()
-        .mockResolvedValueOnce(null) // Email check passes
-        .mockResolvedValueOnce(userEntity); // Username check fails
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ ...userEntity, id: 2 });
 
+      // Act & Assert
       await expect(userSubscriber.beforeInsert(insertEvent)).rejects.toThrow(
         new BadRequestException(`The username '${userEntity.username}' is already in use`)
       );
+      expect(userRepository.findOneBy).toHaveBeenCalledTimes(2);
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ email: userEntity.email });
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ username: userEntity.username });
+    });
+
+    it('should not throw any exception when event.entity is undefined', async () => {
+      // Arrange
+      insertEvent.entity = undefined;
+
+      // Act & Assert
+      await expect(userSubscriber.beforeInsert(insertEvent)).resolves.not.toThrow();
     });
   });
 
   describe('beforeUpdate', () => {
-    it('should not throw any exception when all validations pass', async () => {
-      await expect(userSubscriber.beforeUpdate(updateEvent)).resolves.not.toThrow();
-    });
-
-    it('should throw BadRequestException when updating to an existing email', async () => {
+    it('should not hash password if it has not changed', async () => {
+      // Arrange
       manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue(userEntity);
-      await expect(userSubscriber.beforeUpdate(updateEvent)).rejects.toThrow(
-        new BadRequestException(`The email '${userEntity.email}' is already in use`)
-      );
-    });
 
-    it('should throw BadRequestException when updating to an existing username', async () => {
-      manager.getRepository(User).findOneBy = jest
-        .fn()
-        .mockResolvedValueOnce(null) // Email check passes
-        .mockResolvedValueOnce(userEntity); // Username check fails
+      // Act
+      await userSubscriber.beforeUpdate(updateEvent);
 
-      await expect(userSubscriber.beforeUpdate(updateEvent)).rejects.toThrow(
-        new BadRequestException(`The username '${userEntity.username}' is already in use`)
-      );
+      // Assert
+      expect(CryptUtil.generateSalt).not.toHaveBeenCalled();
+      expect(CryptUtil.hashPassword).not.toHaveBeenCalled();
     });
 
     it('should hash password if it has been changed', async () => {
+      // Arrange
       const newPassword = 'newPassword123';
       userEntity.password = newPassword;
 
       jest.spyOn(CryptUtil, 'generateSalt').mockResolvedValue('newSalt');
       jest.spyOn(CryptUtil, 'hashPassword').mockResolvedValue('newHashedPassword');
 
-      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue(user); // Ensure user is found
+      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue({ ...user });
 
+      // Act
       await userSubscriber.beforeUpdate(updateEvent);
 
+      // Assert
       expect(CryptUtil.generateSalt).toHaveBeenCalledTimes(1);
       expect(CryptUtil.hashPassword).toHaveBeenCalledWith(newPassword, 'newSalt');
       expect(userEntity.password).toBe('newHashedPassword');
       expect(userEntity.salt).toBe('newSalt');
     });
 
-    it('should not hash password if it has not changed', async () => {
-      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue(userEntity); // Ensure user is found
+    it('should throw BadRequestException when updating to an existing email', async () => {
+      // Arrange
+      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue({ ...userEntity, id: 2 });
 
-      await userSubscriber.beforeUpdate(updateEvent);
+      // Act & Assert
+      await expect(userSubscriber.beforeUpdate(updateEvent)).rejects.toThrow(
+        new BadRequestException(`The email '${userEntity.email}' is already in use`)
+      );
+      expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ email: userEntity.email });
+    });
 
-      expect(CryptUtil.generateSalt).not.toHaveBeenCalled();
-      expect(CryptUtil.hashPassword).not.toHaveBeenCalled();
+    it('should throw BadRequestException when updating to an existing username', async () => {
+      // Arrange
+      manager.getRepository(User).findOneBy = jest
+        .fn()
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ ...userEntity, id: 2 });
+
+      // Act & Assert
+      await expect(userSubscriber.beforeUpdate(updateEvent)).rejects.toThrow(
+        new BadRequestException(`The username '${userEntity.username}' is already in use`)
+      );
+      expect(userRepository.findOneBy).toHaveBeenCalledTimes(2);
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ email: userEntity.email });
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ username: userEntity.username });
+    });
+
+    it('should not throw any exception when event.entity is undefined', async () => {
+      // Arrange
+      updateEvent.entity = undefined;
+
+      // Act & Assert
+      await expect(userSubscriber.beforeUpdate(updateEvent)).resolves.not.toThrow();
     });
   });
 });

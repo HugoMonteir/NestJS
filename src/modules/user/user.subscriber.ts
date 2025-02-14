@@ -11,6 +11,10 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   public async beforeInsert(event: InsertEvent<User>): Promise<void> {
     const { entity, manager } = event;
 
+    if (!entity) {
+      return;
+    }
+
     await this._checkEmailUniqueness(entity as User, manager);
     await this._checkUsernameUniqueness(entity as User, manager);
     await this._hashInsertedPassword(event);
@@ -19,16 +23,16 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   public async beforeUpdate(event: UpdateEvent<User>): Promise<void> {
     const { entity, manager } = event;
 
+    if (!entity) {
+      return;
+    }
+
     await this._checkEmailUniqueness(entity as User, manager);
     await this._checkUsernameUniqueness(entity as User, manager);
     await this._hashUpdatedPassword(event);
   }
 
   private async _checkEmailUniqueness(entity: User, manager: EntityManager): Promise<void> {
-    if (!entity) {
-      return;
-    }
-
     const user = await manager.getRepository(User).findOneBy({ email: entity.email });
 
     if (user && user.id !== entity.id) {
@@ -37,10 +41,6 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
 
   private async _checkUsernameUniqueness(entity: User, manager: EntityManager): Promise<void> {
-    if (!entity) {
-      return;
-    }
-
     const user = await manager.getRepository(User).findOneBy({ username: entity.username });
 
     if (user && user.id !== entity.id) {
