@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities';
 import { DataSource } from 'typeorm';
 import { UserSubscriber } from './user.subscriber';
+import { subscriberFactory } from '../../common/factories';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -13,11 +14,7 @@ import { UserSubscriber } from './user.subscriber';
     UserService,
     {
       provide: 'UserSubscriber',
-      useFactory: (dataSource: DataSource): UserSubscriber => {
-        const subscriber = new UserSubscriber();
-        dataSource.subscribers.push(subscriber);
-        return subscriber;
-      },
+      useFactory: subscriberFactory<UserSubscriber>(UserSubscriber),
       inject: [DataSource]
     }
   ],

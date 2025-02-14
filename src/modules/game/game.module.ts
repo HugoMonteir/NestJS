@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Game } from './entities';
 import { DataSource } from 'typeorm';
 import { GameSubscriber } from './game.subscriber';
+import { subscriberFactory } from '../../common/factories';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Game])],
@@ -13,11 +14,7 @@ import { GameSubscriber } from './game.subscriber';
     GameService,
     {
       provide: 'GameSubscriber',
-      useFactory: (dataSource: DataSource): GameSubscriber => {
-        const subscriber = new GameSubscriber();
-        dataSource.subscribers.push(subscriber);
-        return subscriber;
-      },
+      useFactory: subscriberFactory<GameSubscriber>(GameSubscriber),
       inject: [DataSource]
     }
   ]
