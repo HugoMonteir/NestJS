@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { AuthUser } from '../../common/decorators';
-import { UserDto } from '../user/dto';
+import { UserResponseDto } from '../user/dto';
 import { LocalAuthGuard } from '../../common/guards';
 import { LoginDto, TokensDto } from './dto';
 import { ApiOperation, ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
@@ -19,7 +19,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Bad credentials' })
   @ApiBody({ description: 'Login user data', type: LoginDto })
   @HttpCode(200)
-  public async login(@AuthUser() user: UserDto): Promise<TokensDto> {
+  public async login(@AuthUser() user: UserResponseDto): Promise<TokensDto> {
     return await this.authService.jwtSign(user);
   }
 
