@@ -4,6 +4,7 @@ import { AuthRefreshDto } from '../../../../src/modules/auth/dto/auth-refresh.dt
 import { JwtPayload } from '../../../../src/modules/auth/interfaces';
 import { user } from '../user/user-data-mock.constants';
 import { JwtModuleOptions } from '@nestjs/jwt';
+import { JwtConfigInterface } from '../../../../src/common/interfaces';
 
 export const tokensDto: TokensDto = {
   accessToken: 'access-token',
@@ -39,4 +40,10 @@ export const accessTokenPayload: JwtPayload = {
 export const refreshTokenPayload: JwtPayload = {
   sub: user.id,
   type: 'refresh'
+};
+
+export const jwtConfigMock: JwtConfigInterface = {
+  secret: 'mySecret',
+  access: accessConfig,
+  refresh: refreshConfig
 };
