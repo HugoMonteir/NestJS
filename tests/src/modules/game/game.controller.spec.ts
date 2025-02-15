@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GameController } from '../../../../src/modules/game/game.controller';
 import { GameService } from '../../../../src/modules/game/game.service';
-import { createGameDto, gameDto, updateGameDto, updatePartialGameDto } from './game-data-mock.constants';
+import { createGameDtoMock, gameDtoMock, updateGameDtoMock, updatePartialGameDtoMock } from './game-data-mock.constants';
 import { CreateGameDto, GameDto, UpdateGameDto } from '../../../../src/modules/game/dto';
 
 describe('GameController', () => {
@@ -15,10 +15,10 @@ describe('GameController', () => {
         {
           provide: GameService,
           useValue: {
-            findAll: jest.fn().mockResolvedValue([gameDto]),
-            findOne: jest.fn().mockResolvedValue(gameDto),
-            create: jest.fn().mockResolvedValue(gameDto),
-            update: jest.fn().mockResolvedValue(gameDto),
+            findAll: jest.fn().mockResolvedValue([gameDtoMock]),
+            findOne: jest.fn().mockResolvedValue(gameDtoMock),
+            create: jest.fn().mockResolvedValue(gameDtoMock),
+            update: jest.fn().mockResolvedValue(gameDtoMock),
             remove: jest.fn().mockResolvedValue(undefined)
           }
         }
@@ -38,7 +38,7 @@ describe('GameController', () => {
   describe('findAll', () => {
     it('should return an array of games', async () => {
       // Arrange
-      const response: GameDto[] = [{ ...gameDto }];
+      const response: GameDto[] = [{ ...gameDtoMock }];
 
       // Act
       const result = await gameController.findAll();
@@ -52,8 +52,8 @@ describe('GameController', () => {
   describe('findOne', () => {
     it('should return a game by id', async () => {
       // Arrange
-      const id = gameDto.id;
-      const response: GameDto = { ...gameDto };
+      const id = gameDtoMock.id;
+      const response: GameDto = { ...gameDtoMock };
 
       // Act
       const result = await gameController.findOne(id);
@@ -68,11 +68,11 @@ describe('GameController', () => {
   describe('create', () => {
     it('should create a new game', async () => {
       // Arrange
-      const createDto: CreateGameDto = { ...createGameDto };
-      const response: GameDto = { ...gameDto };
+      const createDto: CreateGameDto = { ...createGameDtoMock };
+      const response: GameDto = { ...gameDtoMock };
 
       // Act
-      const result = await gameController.create(createGameDto);
+      const result = await gameController.create(createGameDtoMock);
 
       // Assert
       expect(result).toEqual(response);
@@ -84,9 +84,9 @@ describe('GameController', () => {
   describe('update', () => {
     it('should update an existing game', async () => {
       // Arrange
-      const id = gameDto.id;
-      const updateDto: UpdateGameDto = { ...updateGameDto };
-      const response: GameDto = { ...gameDto, ...updateDto };
+      const id = gameDtoMock.id;
+      const updateDto: UpdateGameDto = { ...updateGameDtoMock };
+      const response: GameDto = { ...gameDtoMock, ...updateDto };
 
       gameService.update = jest.fn().mockResolvedValueOnce(response);
 
@@ -103,9 +103,9 @@ describe('GameController', () => {
   describe('updatePartial', () => {
     it('should partially update an existing game', async () => {
       // Arrange
-      const id = gameDto.id;
-      const updateDto = { ...updatePartialGameDto };
-      const response: GameDto = { ...gameDto, ...updateDto };
+      const id = gameDtoMock.id;
+      const updateDto = { ...updatePartialGameDtoMock };
+      const response: GameDto = { ...gameDtoMock, ...updateDto };
 
       gameService.update = jest.fn().mockResolvedValueOnce(response);
 
@@ -122,7 +122,7 @@ describe('GameController', () => {
   describe('remove', () => {
     it('should remove a game', async () => {
       // Arrange
-      const id = gameDto.id;
+      const id = gameDtoMock.id;
       const response: GameDto = undefined;
 
       // Act

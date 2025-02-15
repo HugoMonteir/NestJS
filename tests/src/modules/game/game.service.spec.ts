@@ -3,7 +3,7 @@ import { GameService } from '../../../../src/modules/game/game.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Game } from '../../../../src/modules/game/entities';
 import { CreateGameDto, GameDto, UpdateGameDto, UpdatePartialGameDto } from '../../../../src/modules/game/dto';
-import { game, gameDto, createGameDto, updateGameDto, updatePartialGameDto } from './game-data-mock.constants';
+import { gameMock, gameDtoMock, createGameDtoMock, updateGameDtoMock, updatePartialGameDtoMock } from './game-data-mock.constants';
 import { GameNotFoundException } from '../../../../src/exceptions';
 import { Repository } from 'typeorm';
 
@@ -18,10 +18,10 @@ describe('GameService', () => {
         {
           provide: getRepositoryToken(Game),
           useValue: {
-            find: jest.fn().mockResolvedValue([game]),
-            findOneBy: jest.fn().mockResolvedValue(game),
-            create: jest.fn().mockReturnValue(game),
-            save: jest.fn().mockResolvedValue(game),
+            find: jest.fn().mockResolvedValue([gameMock]),
+            findOneBy: jest.fn().mockResolvedValue(gameMock),
+            create: jest.fn().mockReturnValue(gameMock),
+            save: jest.fn().mockResolvedValue(gameMock),
             remove: jest.fn().mockResolvedValue(undefined)
           }
         }
@@ -40,8 +40,8 @@ describe('GameService', () => {
   describe('create', () => {
     it('should create a new game', async () => {
       // Arrange
-      const body: CreateGameDto = { ...createGameDto };
-      const response: GameDto = { ...gameDto };
+      const body: CreateGameDto = { ...createGameDtoMock };
+      const response: GameDto = { ...gameDtoMock };
 
       // Act
       const result = await gameService.create(body);
@@ -49,14 +49,14 @@ describe('GameService', () => {
       // Assert
       expect(result).toEqual(response);
       expect(gameRepository.create).toHaveBeenCalledWith(body);
-      expect(gameRepository.save).toHaveBeenCalledWith(game);
+      expect(gameRepository.save).toHaveBeenCalledWith(gameMock);
     });
   });
 
   describe('findAll', () => {
     it('should return an array of games', async () => {
       // Arrange
-      const response: GameDto[] = [{ ...gameDto }];
+      const response: GameDto[] = [{ ...gameDtoMock }];
 
       // Act
       const result = await gameService.findAll();
@@ -70,8 +70,8 @@ describe('GameService', () => {
   describe('findOne', () => {
     it('should return a game by id', async () => {
       // Arrange
-      const id = gameDto.id;
-      const response: GameDto = { ...gameDto };
+      const id = gameDtoMock.id;
+      const response: GameDto = { ...gameDtoMock };
 
       // Act
       const result = await gameService.findOne(id);
@@ -97,9 +97,9 @@ describe('GameService', () => {
   describe('update', () => {
     it('should update an existing game with complete update DTO', async () => {
       // Arrange
-      const updateDto: UpdateGameDto = { ...updateGameDto };
-      const updatedGame = { ...game, ...updateDto };
-      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(game);
+      const updateDto: UpdateGameDto = { ...updateGameDtoMock };
+      const updatedGame = { ...gameMock, ...updateDto };
+      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(gameMock);
       jest.spyOn(gameRepository, 'save').mockResolvedValueOnce(updatedGame);
 
       // Act
@@ -113,9 +113,9 @@ describe('GameService', () => {
 
     it('should partially update an existing game', async () => {
       // Arrange
-      const updatePDto: UpdatePartialGameDto = { ...updatePartialGameDto };
-      const updatedGame = { ...game, ...updatePDto };
-      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(game);
+      const updatePDto: UpdatePartialGameDto = { ...updatePartialGameDtoMock };
+      const updatedGame = { ...gameMock, ...updatePDto };
+      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(gameMock);
       jest.spyOn(gameRepository, 'save').mockResolvedValueOnce(updatedGame);
 
       // Act
@@ -144,14 +144,14 @@ describe('GameService', () => {
       // Arrange
       const id = 1;
       const response: GameDto = undefined;
-      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(game);
+      jest.spyOn(gameRepository, 'findOneBy').mockResolvedValueOnce(gameMock);
 
       // Act
       const result = await gameService.remove(id);
 
       // Assert
       expect(result).toEqual(response);
-      expect(gameRepository.remove).toHaveBeenCalledWith(game);
+      expect(gameRepository.remove).toHaveBeenCalledWith(gameMock);
     });
 
     it('should throw an error if game does not exist on remove', async () => {

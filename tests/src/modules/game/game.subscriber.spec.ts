@@ -2,7 +2,7 @@ import { GameSubscriber } from '../../../../src/modules/game/game.subscriber';
 import { Game } from '../../../../src/modules/game/entities';
 import { InsertEvent, UpdateEvent, EntityManager, Repository } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
-import { game } from './game-data-mock.constants';
+import { gameMock } from './game-data-mock.constants';
 
 describe('GameSubscriber', () => {
   let gameSubscriber: GameSubscriber;
@@ -13,7 +13,7 @@ describe('GameSubscriber', () => {
   let updateEvent: UpdateEvent<Game>;
 
   beforeEach(() => {
-    gameEntity = { ...game };
+    gameEntity = { ...gameMock };
 
     gameRepository = { findOneBy: jest.fn().mockResolvedValue(null) } as unknown as jest.Mocked<Repository<Game>>;
 

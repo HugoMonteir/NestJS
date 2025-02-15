@@ -3,7 +3,7 @@ import { User } from '../../../../src/modules/user/entities';
 import { InsertEvent, UpdateEvent, EntityManager, Repository } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { CryptUtil } from '../../../../src/common/utils/crypt.util';
-import { user } from './user-data-mock.constants';
+import { userMock } from './user-data-mock.constants';
 
 describe('UserSubscriber', () => {
   let userSubscriber: UserSubscriber;
@@ -14,7 +14,7 @@ describe('UserSubscriber', () => {
   let updateEvent: UpdateEvent<User>;
 
   beforeEach(() => {
-    userEntity = { ...user };
+    userEntity = { ...userMock };
 
     userRepository = { findOneBy: jest.fn().mockResolvedValue(null) } as unknown as jest.Mocked<Repository<User>>;
 
@@ -120,7 +120,7 @@ describe('UserSubscriber', () => {
       jest.spyOn(CryptUtil, 'generateSalt').mockResolvedValue('newSalt');
       jest.spyOn(CryptUtil, 'hashPassword').mockResolvedValue('newHashedPassword');
 
-      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue({ ...user });
+      manager.getRepository(User).findOneBy = jest.fn().mockResolvedValue({ ...userMock });
 
       // Act
       await userSubscriber.beforeUpdate(updateEvent);

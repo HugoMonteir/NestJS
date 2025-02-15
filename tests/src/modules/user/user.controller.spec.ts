@@ -1,4 +1,4 @@
-import { createUserDto, userResponseDto } from './user-data-mock.constants';
+import { createUserDtoMock, userResponseDtoMock } from './user-data-mock.constants';
 import { UserController } from '../../../../src/modules/user/user.controller';
 import { UserService } from '../../../../src/modules/user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -15,7 +15,7 @@ describe('UserController', () => {
         {
           provide: UserService,
           useValue: {
-            create: jest.fn().mockReturnValue({ ...userResponseDto })
+            create: jest.fn().mockReturnValue({ ...userResponseDtoMock })
           }
         }
       ]
@@ -34,8 +34,8 @@ describe('UserController', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       // Arrange
-      const body: CreateUserDto = { ...createUserDto };
-      const response = { ...userResponseDto };
+      const body: CreateUserDto = { ...createUserDtoMock };
+      const response = { ...userResponseDtoMock };
 
       // Act
       const result = await userController.create(body);
@@ -50,7 +50,7 @@ describe('UserController', () => {
   describe('getProfile', () => {
     it('should return the authenticated user', async () => {
       // Arrange
-      const mockUser = { ...userResponseDto };
+      const mockUser = { ...userResponseDtoMock };
 
       // Act
       const result = await userController.getProfile(mockUser);

@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDto, UserResponseDto } from '../../../../src/modules/user/dto';
 import { UserNotFoundException, BadCredentialsException } from '../../../../src/exceptions';
-import { createUserDto, user, userResponseDto } from './user-data-mock.constants';
+import { createUserDtoMock, userMock, userResponseDtoMock } from './user-data-mock.constants';
 import { CryptUtil } from '../../../../src/common/utils/crypt.util';
 import { plainToInstance } from 'class-transformer';
 
@@ -21,9 +21,9 @@ describe('UserService', () => {
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOneBy: jest.fn().mockReturnValue(user),
-            create: jest.fn().mockReturnValue(user),
-            save: jest.fn().mockReturnValue(user)
+            findOneBy: jest.fn().mockReturnValue(userMock),
+            create: jest.fn().mockReturnValue(userMock),
+            save: jest.fn().mockReturnValue(userMock)
           }
         }
       ]
@@ -41,8 +41,8 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       // Arrange
-      const body: CreateUserDto = { ...createUserDto };
-      const response: UserResponseDto = { ...userResponseDto };
+      const body: CreateUserDto = { ...createUserDtoMock };
+      const response: UserResponseDto = { ...userResponseDtoMock };
 
       // Act
       const result = await userService.create(body);
@@ -52,7 +52,7 @@ describe('UserService', () => {
       expect(userRepository.create).toHaveBeenCalledTimes(1);
       expect(userRepository.create).toHaveBeenCalledWith(body);
       expect(userRepository.save).toHaveBeenCalledTimes(1);
-      expect(userRepository.save).toHaveBeenCalledWith({ ...user });
+      expect(userRepository.save).toHaveBeenCalledWith({ ...userMock });
     });
   });
 
@@ -60,7 +60,7 @@ describe('UserService', () => {
     it('should find a user by Id', async () => {
       // Arrange
       const id = 1;
-      const response: UserResponseDto = { ...userResponseDto, id };
+      const response: UserResponseDto = { ...userResponseDtoMock, id };
 
       // Act
       const result = await userService.findOne(id);
@@ -86,9 +86,9 @@ describe('UserService', () => {
   describe('validateUserByEmailAndPassword', () => {
     it('should validate user with correct email and password', async () => {
       // Arrange
-      const email = user.email;
+      const email = userMock.email;
       const password = 'Hugo123#';
-      const response: UserResponseDto = { ...userResponseDto };
+      const response: UserResponseDto = { ...userResponseDtoMock };
       jest.spyOn(CryptUtil, 'validatePassword').mockResolvedValueOnce(true);
 
       // Act
@@ -99,7 +99,7 @@ describe('UserService', () => {
       expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
       expect(userRepository.findOneBy).toHaveBeenCalledWith({ email });
       expect(CryptUtil.validatePassword).toHaveBeenCalledTimes(1);
-      expect(CryptUtil.validatePassword).toHaveBeenCalledWith('Hugo123#', user.password, user.salt);
+      expect(CryptUtil.validatePassword).toHaveBeenCalledWith('Hugo123#', userMock.password, userMock.salt);
     });
 
     it('should throw an error if user does not exist', async () => {
@@ -118,7 +118,7 @@ describe('UserService', () => {
 
     it('should throw an error if password is incorrect', async () => {
       // Arrange
-      const email = user.email;
+      const email = userMock.email;
       const password = 'wrongPassword';
       jest.spyOn(CryptUtil, 'validatePassword').mockResolvedValueOnce(false);
 
@@ -129,7 +129,7 @@ describe('UserService', () => {
       expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
       expect(userRepository.findOneBy).toHaveBeenCalledWith({ email });
       expect(CryptUtil.validatePassword).toHaveBeenCalledTimes(1);
-      expect(CryptUtil.validatePassword).toHaveBeenCalledWith(password, user.password, user.salt);
+      expect(CryptUtil.validatePassword).toHaveBeenCalledWith(password, userMock.password, userMock.salt);
     });
   });
 });

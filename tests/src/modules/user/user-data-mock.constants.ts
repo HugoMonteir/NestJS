@@ -1,7 +1,7 @@
 import { User } from '../../../../src/modules/user/entities';
 import { CreateUserDto, UserDto, UserResponseDto } from '../../../../src/modules/user/dto';
 
-export const user: User = {
+export const userMock: User = {
   id: 1,
   username: 'huguito',
   email: 'hugo@gmail.com',
@@ -11,20 +11,20 @@ export const user: User = {
   status: 'active'
 };
 
-export const userDto: UserDto = { ...user };
+export const userDtoMock: UserDto = { ...userMock };
 
-export const userResponseDto: UserResponseDto = {
-  id: userDto.id,
-  username: userDto.username,
-  email: userDto.email,
-  role: userDto.role,
-  status: userDto.status
+export const userResponseDtoMock: UserResponseDto = {
+  id: userDtoMock.id,
+  username: userDtoMock.username,
+  email: userDtoMock.email,
+  role: userDtoMock.role,
+  status: userDtoMock.status
 };
 
-export const createUserDto: CreateUserDto = {
-  username: user.username,
-  email: user.email,
+export const createUserDtoMock: CreateUserDto = {
+  username: userMock.username,
+  email: userMock.email,
   password: 'Hugo123#',
-  status: user.status,
-  role: user.role
+  status: userMock.status,
+  role: userMock.role
 };

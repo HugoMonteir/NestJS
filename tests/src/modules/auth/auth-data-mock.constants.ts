@@ -2,48 +2,40 @@ import { TokensDto } from '../../../../src/modules/auth/dto';
 import { LoginDto } from '../../../../src/modules/auth/dto';
 import { AuthRefreshDto } from '../../../../src/modules/auth/dto/auth-refresh.dto';
 import { JwtPayload } from '../../../../src/modules/auth/interfaces';
-import { user } from '../user/user-data-mock.constants';
+import { userMock } from '../user/user-data-mock.constants';
 import { JwtModuleOptions } from '@nestjs/jwt';
 import { JwtConfigInterface } from '../../../../src/common/interfaces';
 
-export const tokensDto: TokensDto = {
+export const tokensDtoMock: TokensDto = {
   accessToken: 'access-token',
   refreshToken: 'refresh-token'
 };
 
-export const loginDto: LoginDto = {
+export const loginDtoMock: LoginDto = {
   email: 'user@example.com',
   password: 'mySecurePassword123'
 };
 
-export const authRefreshDto: AuthRefreshDto = {
+export const authRefreshDtoMock: AuthRefreshDto = {
   refreshToken: 'valid-refresh-token'
 };
 
-export const expiredAuthRefreshDto: AuthRefreshDto = {
-  refreshToken: 'expired-refresh-token'
-};
+export const accessConfigMock: JwtModuleOptions = { signOptions: { expiresIn: '1h' } };
 
-export const invalidSignatureAuthRefreshDto: AuthRefreshDto = {
-  refreshToken: 'invalid-signature-token'
-};
+export const refreshConfigMock: JwtModuleOptions = { signOptions: { expiresIn: '7d' } };
 
-export const accessConfig: JwtModuleOptions = { signOptions: { expiresIn: '1h' } };
-
-export const refreshConfig: JwtModuleOptions = { signOptions: { expiresIn: '7d' } };
-
-export const accessTokenPayload: JwtPayload = {
-  sub: user.id,
+export const accessTokenPayloadMock: JwtPayload = {
+  sub: userMock.id,
   type: 'access'
 };
 
-export const refreshTokenPayload: JwtPayload = {
-  sub: user.id,
+export const refreshTokenPayloadMock: JwtPayload = {
+  sub: userMock.id,
   type: 'refresh'
 };
 
 export const jwtConfigMock: JwtConfigInterface = {
   secret: 'mySecret',
-  access: accessConfig,
-  refresh: refreshConfig
+  access: accessConfigMock,
+  refresh: refreshConfigMock
 };

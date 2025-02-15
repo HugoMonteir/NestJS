@@ -1,7 +1,7 @@
 import { Game } from '../../../../src/modules/game/entities';
 import { CreateGameDto, GameDto, UpdateGameDto, UpdatePartialGameDto } from '../../../../src/modules/game/dto';
 
-export const game: Game = {
+export const gameMock: Game = {
   id: 1,
   name: 'The Legend of Zelda',
   description: 'An action-adventure game set in Hyrule',
@@ -9,22 +9,22 @@ export const game: Game = {
   platform: 'Nintendo Switch'
 };
 
-export const gameDto: GameDto = { ...game };
+export const gameDtoMock: GameDto = { ...gameMock };
 
-export const createGameDto: CreateGameDto = {
-  name: game.name,
-  description: game.description,
-  genre: game.genre,
-  platform: game.platform
+export const createGameDtoMock: CreateGameDto = {
+  name: gameMock.name,
+  description: gameMock.description,
+  genre: gameMock.genre,
+  platform: gameMock.platform
 };
 
-export const updateGameDto: UpdateGameDto = {
+export const updateGameDtoMock: UpdateGameDto = {
   name: 'Zelda',
-  description: game.description,
-  genre: game.genre,
-  platform: game.platform
+  description: gameMock.description,
+  genre: gameMock.genre,
+  platform: gameMock.platform
 };
 
-export const updatePartialGameDto: UpdatePartialGameDto = {
+export const updatePartialGameDtoMock: UpdatePartialGameDto = {
   description: 'Zelda Game'
 };

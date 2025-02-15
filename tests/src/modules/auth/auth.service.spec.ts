@@ -3,9 +3,16 @@ import { AuthService } from '../../../../src/modules/auth/auth.service';
 import { UserService } from '../../../../src/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtConfigService } from '../../../../src/modules/auth/jwt.config.service';
-import { accessConfig, accessTokenPayload, loginDto, refreshConfig, refreshTokenPayload, tokensDto } from './auth-data-mock.constants';
+import {
+  accessConfigMock,
+  accessTokenPayloadMock,
+  loginDtoMock,
+  refreshConfigMock,
+  refreshTokenPayloadMock,
+  tokensDtoMock
+} from './auth-data-mock.constants';
 import { AuthRefreshDto } from '../../../../src/modules/auth/dto/auth-refresh.dto';
-import { userResponseDto } from '../user/user-data-mock.constants';
+import { userResponseDtoMock } from '../user/user-data-mock.constants';
 import { LoginDto } from '../../../../src/modules/auth/dto';
 import { InvalidTokenException } from '../../../../src/exceptions';
 
@@ -22,22 +29,22 @@ describe('AuthService', () => {
         {
           provide: UserService,
           useValue: {
-            validateUserByEmailAndPassword: jest.fn().mockResolvedValue(userResponseDto),
-            findOne: jest.fn().mockResolvedValue(userResponseDto)
+            validateUserByEmailAndPassword: jest.fn().mockResolvedValue(userResponseDtoMock),
+            findOne: jest.fn().mockResolvedValue(userResponseDtoMock)
           }
         },
         {
           provide: JwtService,
           useValue: {
             sign: jest.fn().mockResolvedValue('token'),
-            verifyAsync: jest.fn().mockResolvedValue(refreshTokenPayload)
+            verifyAsync: jest.fn().mockResolvedValue(refreshTokenPayloadMock)
           }
         },
         {
           provide: JwtConfigService,
           useValue: {
-            getAccessConfig: jest.fn().mockReturnValue(accessConfig),
-            getRefreshConfig: jest.fn().mockReturnValue(refreshConfig)
+            getAccessConfig: jest.fn().mockReturnValue(accessConfigMock),
+            getRefreshConfig: jest.fn().mockReturnValue(refreshConfigMock)
           }
         }
       ]
@@ -60,7 +67,7 @@ describe('AuthService', () => {
   describe('validateUser', () => {
     it('should call userService.validateUserByEmailAndPassword and return user', async () => {
       // Arrange
-      const loginInfo: LoginDto = { ...loginDto };
+      const loginInfo: LoginDto = { ...loginDtoMock };
 
       // Act
       const result = await authService.validateUser(loginInfo.email, loginInfo.password);
@@ -68,23 +75,23 @@ describe('AuthService', () => {
       // Assert
       expect(userService.validateUserByEmailAndPassword).toHaveBeenCalledWith(loginInfo.email, loginInfo.password);
       expect(userService.validateUserByEmailAndPassword).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(userResponseDto);
+      expect(result).toEqual(userResponseDtoMock);
     });
   });
 
   describe('jwtSign', () => {
     it('should return tokens', async () => {
       // Arrange
-      jwtService.sign = jest.fn().mockReturnValueOnce(tokensDto.accessToken).mockReturnValue(tokensDto.refreshToken);
+      jwtService.sign = jest.fn().mockReturnValueOnce(tokensDtoMock.accessToken).mockReturnValue(tokensDtoMock.refreshToken);
 
       // Act
-      const result = await authService.jwtSign(userResponseDto);
+      const result = await authService.jwtSign(userResponseDtoMock);
 
       // Assert
-      expect(jwtService.sign).toHaveBeenCalledWith(accessTokenPayload, accessConfig.signOptions);
-      expect(jwtService.sign).toHaveBeenCalledWith(refreshTokenPayload, refreshConfig.signOptions);
+      expect(jwtService.sign).toHaveBeenCalledWith(accessTokenPayloadMock, accessConfigMock.signOptions);
+      expect(jwtService.sign).toHaveBeenCalledWith(refreshTokenPayloadMock, refreshConfigMock.signOptions);
       expect(jwtService.sign).toHaveBeenCalledTimes(2);
-      expect(result).toEqual(tokensDto);
+      expect(result).toEqual(tokensDtoMock);
     });
   });
 
@@ -92,18 +99,18 @@ describe('AuthService', () => {
     it('should return tokens when refresh token is valid', async () => {
       // Arrange
       const validRefreshDto: AuthRefreshDto = { refreshToken: 'valid-refresh-token' };
-      jest.spyOn(authService, 'jwtSign').mockResolvedValue(tokensDto);
+      jest.spyOn(authService, 'jwtSign').mockResolvedValue(tokensDtoMock);
 
       // Act
       const result = await authService.jwtRefresh(validRefreshDto);
 
       // Assert
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validRefreshDto.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validRefreshDto.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
-      expect(userService.findOne).toHaveBeenCalledWith(refreshTokenPayload.sub);
+      expect(userService.findOne).toHaveBeenCalledWith(refreshTokenPayloadMock.sub);
       expect(userService.findOne).toHaveBeenCalledTimes(1);
       expect(authService.jwtSign).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(tokensDto);
+      expect(result).toEqual(tokensDtoMock);
     });
 
     it('should throw InvalidTokenException if refresh token is expired', async () => {
@@ -115,7 +122,7 @@ describe('AuthService', () => {
 
       // Act & Assert
       await expect(authService.jwtRefresh(expiredRefreshToken)).rejects.toThrow(new InvalidTokenException('Refresh token has expired'));
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(expiredRefreshToken.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(expiredRefreshToken.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
     });
 
@@ -130,7 +137,7 @@ describe('AuthService', () => {
       await expect(authService.jwtRefresh(invalidSignatureDto)).rejects.toThrow(
         new InvalidTokenException('Invalid refresh token signature')
       );
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(invalidSignatureDto.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(invalidSignatureDto.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
     });
 
@@ -143,7 +150,7 @@ describe('AuthService', () => {
 
       // Act & Assert
       await expect(authService.jwtRefresh(invalidSignatureDto)).rejects.toThrow(new InvalidTokenException('Invalid refresh token'));
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(invalidSignatureDto.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(invalidSignatureDto.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
     });
 
@@ -151,18 +158,18 @@ describe('AuthService', () => {
       // Arrange
       const validAccessToken: AuthRefreshDto = { refreshToken: 'valid-refresh-token' };
 
-      jwtService.verifyAsync = jest.fn().mockResolvedValue(accessTokenPayload);
+      jwtService.verifyAsync = jest.fn().mockResolvedValue(accessTokenPayloadMock);
 
       // Act & Assert
       await expect(authService.jwtRefresh(validAccessToken)).rejects.toThrow(new InvalidTokenException('Invalid refresh token'));
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validAccessToken.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validAccessToken.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
     });
 
     it('should throw InvalidTokenException if user is not found', async () => {
       // Arrange
       const validRefreshToken: AuthRefreshDto = { refreshToken: 'valid-refresh-token' };
-      const payload = { ...refreshTokenPayload, sub: -1 };
+      const payload = { ...refreshTokenPayloadMock, sub: -1 };
       jwtService.verifyAsync = jest.fn().mockResolvedValue(payload);
       userService.findOne = jest.fn().mockResolvedValue(null);
 
@@ -170,7 +177,7 @@ describe('AuthService', () => {
       await expect(authService.jwtRefresh(validRefreshToken)).rejects.toThrow(
         new InvalidTokenException('User not found for this refresh token')
       );
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validRefreshToken.refreshToken, refreshConfig.verifyOptions);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith(validRefreshToken.refreshToken, refreshConfigMock.verifyOptions);
       expect(jwtService.verifyAsync).toHaveBeenCalledTimes(1);
       expect(userService.findOne).toHaveBeenCalledWith(payload.sub);
       expect(userService.findOne).toHaveBeenCalledTimes(1);
