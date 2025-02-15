@@ -30,7 +30,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (err || !user) {
       throw err || new InvalidTokenException('Invalid Access token');
     }
-    console.log(user);
     return user;
   }
 }
