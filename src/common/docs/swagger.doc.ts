@@ -6,7 +6,11 @@ export async function swaggerDoc(app: INestApplication, environment: string): Pr
     return;
   }
 
-  const docOptions = new DocumentBuilder().setTitle('NestJS game API').setVersion('1.0').build();
+  const docOptions = new DocumentBuilder()
+    .setTitle('NestJS game API')
+    .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
+    .build();
 
   const document = SwaggerModule.createDocument(app, docOptions);
 

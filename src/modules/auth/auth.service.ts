@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto } from '../user/dto';
+import { UserResponseDto } from '../user/dto';
 import { TokensDto } from './dto';
-import { JwtConfigService } from './jwt.config.service';
 import { plainToInstance } from 'class-transformer';
 import { AuthRefreshDto } from './dto/auth-refresh.dto';
 import { JwtPayload } from './interfaces';
 import { InvalidTokenException } from '../../exceptions';
+import { JwtConfigService } from './jwt.config.service';
 
 @Injectable()
 export class AuthService {
@@ -17,34 +17,48 @@ export class AuthService {
     private jwtConfigService: JwtConfigService
   ) {}
 
-  public async validateUser(email: string, password: string): Promise<UserDto> {
+  public async validateUser(email: string, password: string): Promise<UserResponseDto> {
     return await this.userService.validateUserByEmailAndPassword(email, password);
   }
 
-  public async jwtSign(user: UserDto): Promise<TokensDto> {
+  public async jwtSign(user: UserResponseDto): Promise<TokensDto> {
     const accessConfig = this.jwtConfigService.getAccessConfig();
     const refreshConfig = this.jwtConfigService.getRefreshConfig();
 
-    const payload: JwtPayload = { sub: user.id };
-
-    const accessToken = this.jwtService.sign(payload, accessConfig.signOptions);
-
-    const refreshToken = this.jwtService.sign(payload, refreshConfig.signOptions);
+    const accessToken = this.jwtService.sign({ sub: user.id, type: 'access' } as JwtPayload, accessConfig.signOptions);
+    const refreshToken = this.jwtService.sign({ sub: user.id, type: 'refresh' } as JwtPayload, refreshConfig.signOptions);
 
     return plainToInstance(TokensDto, { accessToken, refreshToken });
   }
 
   public async jwtRefresh(authRefreshDto: AuthRefreshDto): Promise<TokensDto> {
     const refreshConfig = this.jwtConfigService.getRefreshConfig();
+    let verified: JwtPayload;
 
-    const verified = await this.jwtService.verifyAsync<JwtPayload>(authRefreshDto.refreshToken, refreshConfig.verifyOptions);
+    try {
+      verified = await this.jwtService.verifyAsync<JwtPayload>(authRefreshDto.refreshToken, refreshConfig.verifyOptions);
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new InvalidTokenException('Refresh token has expired');
+      }
 
-    if (!verified) {
-      throw new InvalidTokenException('Invalid token');
+      if (error.name === 'JsonWebTokenError') {
+        throw new InvalidTokenException('Invalid refresh token signature');
+      }
+
+      throw new InvalidTokenException('Invalid refresh token');
     }
 
-    const id = verified.sub;
-    const user = await this.userService.findOne(id);
+    if (!verified || verified.type !== 'refresh') {
+      throw new InvalidTokenException('Invalid refresh token');
+    }
+
+    const user = await this.userService.findOne(verified.sub);
+
+    if (!user) {
+      throw new InvalidTokenException('User not found for this refresh token');
+    }
+
     return this.jwtSign(user);
   }
 }

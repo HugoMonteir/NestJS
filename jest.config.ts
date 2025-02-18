@@ -8,7 +8,13 @@ const config: Config = {
     '^.+\\.(t|j)s$': 'ts-jest'
   },
   collectCoverage: true,
-  collectCoverageFrom: ['src/modules/**/*.controller.ts', 'src/modules/**/*.service.ts', 'src/modules/**/*.subscriber.ts'],
+  collectCoverageFrom: [
+    'src/modules/**/*.controller.ts',
+    'src/modules/**/*.service.ts',
+    'src/modules/**/*.subscriber.ts',
+    'src/common/guards/*.guard.ts',
+    'src/common/strategies/*.strategy.ts'
+  ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/dist/',
@@ -17,7 +23,11 @@ const config: Config = {
     'src/modules/.*/dto/.*',
     'src/modules/.*/entities/.*',
     'src/modules/.*/interfaces/.*',
-    'src/common/.*',
+    'src/common/.*/decorators/.*',
+    'src/common/.*/docs/.*',
+    'src/common/.*/factories/.*',
+    'src/common/.*/interfaces/.*',
+    'src/common/.*/pipes/.*',
     'src/exceptions/.*',
     'src/middlewares/.*'
   ],

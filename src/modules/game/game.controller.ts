@@ -1,13 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Put, Inject } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Put } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { CreateGameDto, GameDto, UpdateGameDto, UpdatePartialGameDto } from './dto';
-import { GameServiceInterface } from './interfaces';
 import { ParseIntIdPipe } from '../../common/pipes';
+import { GameService } from './game.service';
 
 @ApiTags('Games')
 @Controller('games')
 export class GameController {
-  public constructor(@Inject('GameService') private readonly gameService: GameServiceInterface) {}
+  public constructor(private readonly gameService: GameService) {}
 
   @ApiOperation({ summary: 'Return all games' })
   @ApiResponse({ status: 200, description: 'List of games returned successfully', type: [GameDto] })

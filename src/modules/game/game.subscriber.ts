@@ -26,7 +26,7 @@ export class GameSubscriber implements EntitySubscriberInterface<Game> {
     const game = await manager.getRepository(Game).findOneBy({ name: entity.name });
 
     if (game && game.id !== entity.id) {
-      throw new BadRequestException(`The name '${entity.name}' is already in use.`);
+      throw new BadRequestException(`The name '${entity.name}' is already in use`);
     }
   }
 }
