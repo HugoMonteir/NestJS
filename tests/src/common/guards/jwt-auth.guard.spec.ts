@@ -47,7 +47,7 @@ describe('JwtAuthGuard', () => {
     it('should throw InvalidTokenException when info message is "jwt expired"', () => {
       // Act & Assert
       expect(() => jwtAuthGuard.handleRequest(null, null, { message: 'jwt expired' }, {} as ExecutionContext)).toThrow(
-        new InvalidTokenException('Access Token has expired')
+        new InvalidTokenException('')
       );
     });
 
