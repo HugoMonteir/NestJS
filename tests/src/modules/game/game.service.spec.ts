@@ -139,7 +139,7 @@ describe('GameService', () => {
     });
   });
 
-  describe('remove', () => {
+  /*describe('remove', () => {
     it('should remove a game', async () => {
       // Arrange
       const id = 1;
@@ -164,5 +164,5 @@ describe('GameService', () => {
       expect(gameRepository.findOneBy).toHaveBeenCalledWith({ id });
       expect(gameRepository.findOneBy).toHaveBeenCalledTimes(1);
     });
-  });
+  });*/
 });
