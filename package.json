@@ -16,7 +16,7 @@
     "lint:watch": "chokidar \"{src,apps,libs,tests}/**/*.ts\" -c \"npm run lint\"",
     "test": "jest --config jest.config.ts",
     "test:watch": "jest --config jest.config.ts --watch",
-    "test:cov": "nyc --config .nycrc.json npm run test",
+    "test:cov": "jest --coverage --config jest.config.ts",
     "test:cov:browser:win": "start coverage/lcov-report/index.html",
     "test:cov:browser:linux": "xdg-open coverage/lcov-report/index.html",
     "test:e2e": "jest --config tests/e2e/jest-e2e.json",

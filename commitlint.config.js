@@ -19,7 +19,7 @@ module.exports = {
     'type-enum': [
       2,
       'always',
-      ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'revert']
+      ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'revert', 'remove']
     ],
     'emoji-empty': [2, 'never'],
     'emoji-enum': [2, 'always', allowedEmojiCodes]
