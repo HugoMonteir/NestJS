@@ -1,7 +1,7 @@
 import { GameSubscriber } from '../../../../src/modules/game/game.subscriber';
 import { Game } from '../../../../src/modules/game/entities';
 import { InsertEvent, UpdateEvent, EntityManager, Repository } from 'typeorm';
-/*import { BadRequestException } from '@nestjs/common';*/
+import { BadRequestException } from '@nestjs/common';
 import { gameMock } from './game-data-mock.constants';
 
 describe('GameSubscriber', () => {
@@ -44,7 +44,7 @@ describe('GameSubscriber', () => {
     });
   });
 
-  /*describe('beforeInsert', () => {
+  describe('beforeInsert', () => {
     it('should not throw an exception when game name is unique', async () => {
       // Act & Assert
       await expect(gameSubscriber.beforeInsert(insertEvent)).resolves.not.toThrow();
@@ -96,5 +96,5 @@ describe('GameSubscriber', () => {
       // Act & Assert
       await expect(gameSubscriber.beforeUpdate(updateEvent)).resolves.not.toThrow();
     });
-  });*/
+  });
 });

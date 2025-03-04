@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GameController } from '../../../../src/modules/game/game.controller';
 import { GameService } from '../../../../src/modules/game/game.service';
-import { gameDtoMock } from './game-data-mock.constants';
-/*import { createGameDtoMock, gameDtoMock, updateGameDtoMock, updatePartialGameDtoMock } from './game-data-mock.constants';
-import { CreateGameDto, GameDto, UpdateGameDto } from '../../../../src/modules/game/dto';*/
+import { createGameDtoMock, gameDtoMock, updateGameDtoMock, updatePartialGameDtoMock } from './game-data-mock.constants';
+import { CreateGameDto, GameDto, UpdateGameDto } from '../../../../src/modules/game/dto';
 
 describe('GameController', () => {
   let gameController: GameController;
@@ -36,7 +35,7 @@ describe('GameController', () => {
     expect(gameService).toBeDefined();
   });
 
-  /*describe('findAll', () => {
+  describe('findAll', () => {
     it('should return an array of games', async () => {
       // Arrange
       const response: GameDto[] = [{ ...gameDtoMock }];
@@ -134,5 +133,5 @@ describe('GameController', () => {
       expect(gameService.remove).toHaveBeenCalledWith(id);
       expect(gameService.remove).toHaveBeenCalledTimes(1);
     });
-  });*/
+  });
 });
